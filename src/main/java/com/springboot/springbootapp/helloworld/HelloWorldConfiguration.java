@@ -1,7 +1,9 @@
-package com.springboot.springbootapp;
+package com.springboot.springbootapp.helloworld;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 record Person(String name, int age, Address address){}
 record Address(String firstLine, String city){}
@@ -25,13 +27,20 @@ public class HelloWorldConfiguration {
         return new Person(methodName(), methodAge(), address());
     }
     @Bean
-    public Person person3Parameters(String methodName, int methodAge, Address customAddress){
+    public Person person3Parameters(String methodName, int methodAge, @Qualifier("address2") Address customAddress){
         return new Person(methodName, methodAge, customAddress);
     }
 
     @Bean(name="customAddress")
+    @Primary
     public Address address(){
         return new Address("Middleton Park Road", "Leeds");
+    }
+
+    @Bean
+    @Qualifier("address2")
+    public Address address2(){
+        return new Address("Chappeltown", "Leeds");
     }
 
 }
